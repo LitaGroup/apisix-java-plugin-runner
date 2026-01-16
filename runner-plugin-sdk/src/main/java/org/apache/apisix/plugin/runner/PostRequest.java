@@ -19,6 +19,7 @@ package org.apache.apisix.plugin.runner;
 
 import io.github.api7.A6.HTTPRespCall.Req;
 import io.github.api7.A6.TextEntry;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.apisix.plugin.runner.filter.PluginFilter;
 import org.springframework.util.CollectionUtils;
 
@@ -28,6 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+@Slf4j
 public class PostRequest implements A6Request {
     private final Req req;
 
@@ -48,6 +50,13 @@ public class PostRequest implements A6Request {
     }
 
     public static PostRequest from(ByteBuffer body) {
+        ByteBuffer newBody = body.duplicate();
+        StringBuilder sb = new StringBuilder();
+        for(int i = newBody.position(); i < newBody.limit(); i++){
+            sb.append(String.format("%02x", newBody.get(i)));
+        }
+        log.info("create PostRequest: array:{} limit:{} position:{}", sb, newBody.limit(), newBody.position());
+
         Req req = Req.getRootAsReq(body);
         return new PostRequest(req);
     }
