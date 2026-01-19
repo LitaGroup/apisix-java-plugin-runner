@@ -57,15 +57,17 @@ public class PostRequest implements A6Request {
         }
 
         Req req = Req.getRootAsReq(body);
+        var request = new PostRequest(req);
+        int status = request.getUpstreamStatusCode();
+
         try{
-            for(var i = 0; i < req.headersLength(); i++){
-                req.headers(i).name();
-            }
+            var headers = request.getUpstreamHeaders();
+            log.info("status: {} headers: {}", status, headers);
         }catch (Exception e){
             log.error("error headersLength: array:{} limit:{} position:{}", sb, newBody.limit(), newBody.position());
         }
 
-        return new PostRequest(req);
+        return request;
     }
 
     @Override
