@@ -55,9 +55,14 @@ public class PostRequest implements A6Request {
         for(int i = newBody.position(); i < newBody.limit(); i++){
             sb.append(String.format("%02x", newBody.get(i)));
         }
-        log.info("create PostRequest: array:{} limit:{} position:{}", sb, newBody.limit(), newBody.position());
 
         Req req = Req.getRootAsReq(body);
+        try{
+            req.headersLength();
+        }catch (Exception e){
+            log.error("error headersLength: array:{} limit:{} position:{}", sb, newBody.limit(), newBody.position());
+        }
+
         return new PostRequest(req);
     }
 
