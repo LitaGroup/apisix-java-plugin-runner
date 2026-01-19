@@ -58,7 +58,9 @@ public class PostRequest implements A6Request {
 
         Req req = Req.getRootAsReq(body);
         try{
-            req.headersLength();
+            for(var i = 0; i < req.headersLength(); i++){
+                req.headers(i).name();
+            }
         }catch (Exception e){
             log.error("error headersLength: array:{} limit:{} position:{}", sb, newBody.limit(), newBody.position());
         }
